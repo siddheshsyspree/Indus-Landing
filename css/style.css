@@ -116,7 +116,7 @@ a{ color:inherit; text-decoration:none; }
 .lead-title.light{ color:var(--white); }
 .serif-italic{ font-family:var(--serif-italic); font-style:italic; font-weight:600; }
 
-.grid-section{ padding:clamp(70px,10vw,120px) 0; background:var(--cream); }
+.grid-section{ padding:clamp(56px,7vw,90px) 0; background:var(--cream); }
 .grid-section.gallery-section{ background:var(--cream-2); }
 
 /* ================= Locations grid ================= */
@@ -161,7 +161,22 @@ a{ color:inherit; text-decoration:none; }
 .mosaic-tile[data-pos="cocktail"]{ grid-column:5; grid-row:1 / span 2; }
 
 /* ================= About Us / Memberships lead copy ================= */
-.about-section .section-lead{ margin-bottom:0; }
+.about-section{ padding-bottom:clamp(40px,5vw,64px); }
+.about-section .section-lead{ margin-bottom:0; max-width:1040px; }
+
+/* ================= Section divider ================= */
+.section-divider{
+  display:flex; align-items:center; justify-content:center; gap:22px;
+  max-width:220px; margin:0 auto; background:var(--cream);
+}
+.section-divider span{
+  flex:1; height:1px;
+  background:linear-gradient(90deg, rgba(201,168,106,0), rgba(201,168,106,.55));
+}
+.section-divider span:last-child{
+  background:linear-gradient(90deg, rgba(201,168,106,.55), rgba(201,168,106,0));
+}
+.section-divider img{ width:26px; height:26px; opacity:.85; flex:0 0 auto; }
 .about-quote{
   font-family:var(--serif-italic); font-style:italic; font-weight:500;
   font-size:clamp(1.15rem, 2vw, 1.5rem);
@@ -175,6 +190,7 @@ a{ color:inherit; text-decoration:none; }
 }
 
 /* ================= Facilities grid ================= */
+.facilities-section{ padding-top:clamp(40px,5vw,64px); }
 .tile-grid.facilities-grid{
   display:grid;
   grid-template-columns:repeat(3, 1fr);
@@ -223,7 +239,7 @@ a{ color:inherit; text-decoration:none; }
 .tier-card p{ color:rgba(255,255,255,.78); font-size:.87rem; line-height:1.55; }
 
 /* ================= Register Interest form ================= */
-.register-section{ background:var(--ink); padding:clamp(80px,11vw,130px) 0; }
+.register-section{ background:var(--ink); padding:clamp(56px,7vw,90px) 0; }
 .register-card{ max-width:760px; margin:0 auto; text-align:center; }
 .register-mark{ width:44px; height:44px; margin:0 auto 20px; opacity:.9; }
 .register-intro{
