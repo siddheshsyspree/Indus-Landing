@@ -51,5 +51,21 @@
   window.addEventListener('pageshow', checkReveal);
   checkReveal();
 
+  /* Register Interest form */
+  var registerForm = document.getElementById('registerForm');
+  if (registerForm){
+    registerForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      if (!registerForm.checkValidity()){
+        registerForm.reportValidity();
+        return;
+      }
+      var btn = registerForm.querySelector('.form-submit');
+      btn.textContent = 'Thank You — We’ll Be In Touch';
+      btn.disabled = true;
+      registerForm.querySelectorAll('.form-input').forEach(function(el){ el.disabled = true; });
+    });
+  }
+
   /* Smooth in-page nav for back-to-top / brand link already handled via CSS scroll-behavior */
 })();

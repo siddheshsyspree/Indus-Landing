@@ -212,6 +212,95 @@
     </div>
   </section>
 
+  <!-- ============ 9. REGISTER INTEREST — form section ============ -->
+  <section class="register-section" id="register" aria-label="Register Interest">
+    <div class="section-inner">
+      <div class="register-card reveal">
+        <img src="images/logo.png" alt="" class="register-mark" aria-hidden="true">
+        <p class="eyebrow light">Take The Next Step</p>
+        <h2 class="lead-title light">Register Your Interest</h2>
+        <p class="register-intro">Membership is strictly by invitation or member referral, at the sole discretion of the Membership Committee.</p>
+
+        <form class="register-form" id="registerForm" novalidate>
+          <div class="form-row">
+            <div class="form-field">
+              <label class="form-label" for="fullName">Full Name <span class="req">*</span></label>
+              <input class="form-input" type="text" id="fullName" name="fullName" placeholder="Your full name" required>
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="companyName">Company Name <span class="req">*</span></label>
+              <input class="form-input" type="text" id="companyName" name="companyName" placeholder="Your company" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-field">
+              <label class="form-label" for="city">City <span class="req">*</span></label>
+              <input class="form-input" type="text" id="city" name="city" placeholder="Your city" required>
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="age">Age <span class="req">*</span></label>
+              <select class="form-input form-select" id="age" name="age" required>
+                <option value="" disabled selected>Select age</option>
+                <option value="18-24">18 &ndash; 24</option>
+                <option value="25-34">25 &ndash; 34</option>
+                <option value="35-44">35 &ndash; 44</option>
+                <option value="45-54">45 &ndash; 54</option>
+                <option value="55-64">55 &ndash; 64</option>
+                <option value="65+">65+</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row form-row-single">
+            <div class="form-field">
+              <label class="form-label" for="designation">Designation <span class="req">*</span></label>
+              <select class="form-input form-select" id="designation" name="designation" required>
+                <option value="" disabled selected>Select designation</option>
+                <option value="CXO">CXO</option>
+                <option value="Founder">Founder</option>
+                <option value="Board Member">Board Member</option>
+                <option value="Director">Director</option>
+                <option value="Senior Executive">Senior Executive</option>
+                <option value="Renowned Professional">Renowned Professional</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row form-row-single">
+            <div class="form-field">
+              <label class="form-label" for="referral">How did you learn about us?</label>
+              <select class="form-input form-select" id="referral" name="referral">
+                <option value="" disabled selected>Select an option</option>
+                <option value="Referral by a Member">Referral by a Member</option>
+                <option value="Social Media">Social Media</option>
+                <option value="Event">Event</option>
+                <option value="Press or Media">Press or Media</option>
+                <option value="Search Engine">Search Engine</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-field">
+              <label class="form-label" for="mobile">Mobile <span class="req">*</span></label>
+              <input class="form-input" type="tel" id="mobile" name="mobile" placeholder="Mobile number" required>
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="email">Email <span class="req">*</span></label>
+              <input class="form-input" type="email" id="email" name="email" placeholder="you@company.com" required>
+            </div>
+          </div>
+
+          <button type="submit" class="form-submit">Submit</button>
+          <p class="register-fine">Fields marked with <span class="req">*</span> are required.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <footer class="site-footer">
