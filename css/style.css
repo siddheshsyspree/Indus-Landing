@@ -190,7 +190,7 @@ a{ color:inherit; text-decoration:none; }
 }
 
 /* ================= Facilities grid ================= */
-.facilities-section{ padding-top:clamp(40px,5vw,64px); }
+.facilities-section{ padding-top:clamp(40px,5vw,64px); padding-bottom:clamp(40px,5vw,64px); }
 .tile-grid.facilities-grid{
   display:grid;
   grid-template-columns:repeat(3, 1fr);
@@ -215,7 +215,7 @@ a{ color:inherit; text-decoration:none; }
 .facility-body p{ color:var(--text-muted); font-size:.94rem; line-height:1.7; }
 
 /* ================= Membership tier grid ================= */
-.membership-tiers-section{ background:var(--cream); }
+.membership-tiers-section{ background:var(--cream); padding-top:clamp(40px,5vw,64px); }
 .membership-tiers-section .section-lead{ max-width:1040px; }
 .tile-grid.tier-grid{
   display:grid;
