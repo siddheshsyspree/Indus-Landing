@@ -114,8 +114,6 @@ a{ color:inherit; text-decoration:none; }
   letter-spacing:.01em;
 }
 .lead-title.light{ color:var(--white); }
-.section-lead .about-quote{ margin-top:24px; }
-.section-lead .about-fine{ margin-top:18px; }
 .serif-italic{ font-family:var(--serif-italic); font-style:italic; font-weight:600; }
 
 .grid-section{ padding:clamp(70px,10vw,120px) 0; background:var(--cream); }
@@ -162,37 +160,19 @@ a{ color:inherit; text-decoration:none; }
 .mosaic-tile[data-pos="rooftop"]{ grid-column:4; grid-row:2; }
 .mosaic-tile[data-pos="cocktail"]{ grid-column:5; grid-row:1 / span 2; }
 
-/* ================= Content banners (About / Memberships intro) ================= */
-.content-banner{
-  height:auto; min-height:unset; max-height:unset;
-  align-items:center;
-  padding:clamp(90px,14vw,160px) 0;
-}
-.content-banner .banner-scrim{
-  background:
-    linear-gradient(180deg, rgba(6,10,18,.28) 0%, rgba(6,10,18,.1) 30%, rgba(6,10,18,.1) 60%, rgba(6,10,18,.5) 100%),
-    radial-gradient(ellipse 60% 55% at center, rgba(6,10,18,.42) 0%, rgba(6,10,18,0) 72%);
-}
-.content-banner-inner{ position:relative; z-index:2; }
-.about-inner{ max-width:760px; margin:0 auto; text-align:center; }
-.content-title{
-  font-size:clamp(2rem, 4vw, 2.9rem);
-  margin:6px 0 30px;
-  color:var(--navy);
-}
-.content-title.light{ color:var(--white); }
+/* ================= About Us / Memberships lead copy ================= */
+.about-section .section-lead{ margin-bottom:0; }
 .about-quote{
   font-family:var(--serif-italic); font-style:italic; font-weight:500;
   font-size:clamp(1.15rem, 2vw, 1.5rem);
   line-height:1.6;
   color:var(--navy);
+  margin-top:24px;
 }
-.about-quote.light{ color:rgba(255,255,255,.9); }
 .about-fine{
   margin-top:22px; font-size:.92rem; letter-spacing:.04em; text-transform:uppercase;
   color:var(--text-muted); font-weight:500;
 }
-.about-fine.light{ color:rgba(255,255,255,.6); }
 
 /* ================= Facilities grid ================= */
 .tile-grid.facilities-grid{
@@ -228,7 +208,7 @@ a{ color:inherit; text-decoration:none; }
 }
 .tier-card{
   position:relative; overflow:hidden; margin:0;
-  aspect-ratio:3/4;
+  aspect-ratio:16/10;
   box-shadow:0 14px 34px rgba(15,20,30,.14);
 }
 .tier-card img{ width:100%; height:100%; object-fit:cover; transition:transform .8s var(--ease); }
@@ -348,8 +328,6 @@ a{ color:inherit; text-decoration:none; }
   .banner-section{ height:auto; aspect-ratio:3/4; min-height:420px; max-height:560px; background:var(--ink); }
   .banner-img{ object-fit:contain; transform:scale(1); }
   .kenburns{ animation:none; }
-  .content-banner{ aspect-ratio:auto; min-height:unset; max-height:unset; background:none; padding:64px 0; }
-  .content-banner .banner-img{ object-fit:cover; }
   .tile-grid.locations-grid{ grid-template-columns:repeat(2, 1fr); gap:10px; }
   .mosaic-grid{ grid-template-columns:1fr; }
   .mosaic-tile[data-pos="dining"],
