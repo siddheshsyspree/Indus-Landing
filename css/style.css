@@ -54,21 +54,19 @@ a{ color:inherit; text-decoration:none; }
 .site-header{
   position:fixed; top:0; left:0; width:100%; z-index:900;
   padding:18px 0;
-  transition:background .4s var(--ease), padding .4s var(--ease), box-shadow .4s var(--ease);
+  transition:opacity .4s var(--ease), visibility .4s var(--ease);
 }
 .site-header-inner{
   width:100%; padding:0 clamp(20px,4vw,56px);
   display:flex; align-items:center;
 }
 .site-header.is-scrolled{
-  background:rgba(12,20,32,.88);
-  backdrop-filter:blur(10px);
-  padding:10px 0;
-  box-shadow:0 8px 24px rgba(0,0,0,.18);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
 }
 .brand{ display:flex; align-items:center; }
-.brand-lockup{ height:52px; width:auto; transition:height .4s var(--ease); }
-.site-header.is-scrolled .brand-lockup{ height:42px; }
+.brand-lockup{ height:52px; width:auto; }
 
 /* ================= Full-width banner/statement sections ================= */
 .banner-section{
@@ -342,9 +340,8 @@ a{ color:inherit; text-decoration:none; }
 
 @media (max-width: 640px){
   .brand-lockup{ height:38px; }
-  .site-header.is-scrolled .brand-lockup{ height:32px; }
-  .banner-section{ height:auto; aspect-ratio:3/4; min-height:420px; max-height:560px; background:var(--ink); }
-  .banner-img{ object-fit:contain; }
+  .banner-section{ height:auto; aspect-ratio:1920/970; min-height:200px; background:var(--ink); }
+  .banner-img{ object-fit:cover; }
   .tile-grid.locations-grid{ grid-template-columns:repeat(2, 1fr); gap:10px; }
   .mosaic-grid{ grid-template-columns:1fr; }
   .mosaic-tile[data-pos="dining"],
