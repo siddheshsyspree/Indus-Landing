@@ -172,8 +172,7 @@ a{ color:inherit; text-decoration:none; }
   aspect-ratio:16/10; background:var(--navy);
   box-shadow:0 10px 30px rgba(15,20,30,.08);
 }
-.tile img{ width:100%; height:100%; object-fit:cover; object-position:left top; transition:transform .8s var(--ease); }
-.tile:hover img{ transform:scale(1.08); }
+.tile img{ width:100%; height:100%; object-fit:cover; object-position:left top; }
 .tile::after{
   content:''; position:absolute; inset:0;
   box-shadow:inset 0 0 0 1px rgba(255,255,255,0);
