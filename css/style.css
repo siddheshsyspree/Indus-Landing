@@ -89,9 +89,6 @@ a{ color:inherit; text-decoration:none; }
 }
 .banner-scrim{
   position:absolute; inset:0;
-  background:linear-gradient(180deg, rgba(6,10,18,.06) 0%, rgba(6,10,18,0) 35%, rgba(6,10,18,.34) 100%);
-}
-.statement-section .banner-scrim{
   background:linear-gradient(180deg, rgba(6,10,18,.02) 0%, rgba(6,10,18,0) 35%, rgba(6,10,18,.12) 100%);
 }
 
