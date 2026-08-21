@@ -293,7 +293,8 @@ a{ color:inherit; text-decoration:none; }
 /* ================= Footer ================= */
 .site-footer{ background:var(--ink); padding:46px 0 54px; border-top:1px solid rgba(201,168,106,.18); }
 .footer-inner{ display:flex; flex-direction:column; align-items:center; gap:16px; text-align:center; }
-.footer-mark{ width:min(150px, 50%); height:auto; opacity:.9; }
+.footer-logo-link{ display:inline-block; width:min(150px, 50%); }
+.footer-mark{ display:block; width:100%; height:auto; opacity:.9; }
 .footer-line{ font-size:.82rem; letter-spacing:.03em; color:rgba(255,255,255,.55); }
 .footer-line a{ color:rgba(255,255,255,.75); }
 .footer-line a:hover{ color:var(--gold); }
