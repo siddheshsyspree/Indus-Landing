@@ -158,6 +158,7 @@ a{ color:inherit; text-decoration:none; }
 
 .grid-section{ padding:clamp(24px,3vw,40px) 0; background:var(--cream); }
 .grid-section.gallery-section{ background:var(--cream-2); }
+#gallery .section-inner{ padding-left:0; padding-right:0; }
 
 /* ================= Locations grid ================= */
 .tile-grid.locations-grid{
@@ -185,9 +186,9 @@ a{ color:inherit; text-decoration:none; }
 .mosaic-grid{
   display:grid;
   grid-template-columns:repeat(5, 1fr);
-  grid-template-rows:repeat(2, minmax(160px,1fr));
-  gap:12px;
-  height:clamp(420px, 50vw, 600px);
+  grid-template-rows:repeat(2, minmax(100px,1fr));
+  gap:4px;
+  height:clamp(280px, 29vw, 580px);
 }
 .mosaic-tile{ margin:0; position:relative; overflow:hidden; box-shadow:0 10px 30px rgba(15,20,30,.1); }
 .mosaic-tile img{ width:100%; height:100%; object-fit:cover; transition:transform .8s var(--ease); }
