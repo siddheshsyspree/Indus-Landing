@@ -99,16 +99,23 @@ a{ color:inherit; text-decoration:none; }
 }
 .eyebrow.light{ color:var(--gold); }
 .section-lead{ text-align:center; max-width:720px; margin:0 auto 56px; }
+.section-logo-only{ text-align:center; margin:0 auto 40px; }
 .lead-mark{ width:44px; height:44px; margin:0 auto 20px; opacity:.9; }
 .lead-logo-full{ width:min(220px, 60%); height:auto; margin:0 auto 24px; }
+.section-logo-only .lead-logo-full{ margin:0 auto; }
 .lead-title{
   font-size:clamp(1.6rem, 3.4vw, 2.5rem);
   font-weight:600;
   line-height:1.28;
   color:var(--navy);
   letter-spacing:.01em;
+  text-align:center;
+  max-width:720px;
+  margin:0 auto;
 }
 .lead-title.light{ color:var(--white); }
+.lead-title-after{ margin-top:44px; }
+.lead-title-caps{ text-transform:uppercase; font-weight:700; letter-spacing:.03em; }
 .serif-italic{ font-family:var(--serif-italic); font-style:italic; font-weight:600; }
 
 .grid-section{ padding:clamp(56px,7vw,90px) 0; background:var(--cream); }
