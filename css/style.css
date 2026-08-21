@@ -114,6 +114,9 @@ a{ color:inherit; text-decoration:none; }
   margin:0 auto;
 }
 .lead-title.light{ color:var(--white); }
+#about .lead-title,
+#facilities .lead-title,
+#memberships .lead-title{ color:#1e3870; }
 .lead-title-after{
   margin-top:24px;
   font-size:clamp(1.2rem, 1.7vw, 1.5rem);
