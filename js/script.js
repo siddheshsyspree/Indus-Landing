@@ -61,9 +61,37 @@
         return;
       }
       var btn = registerForm.querySelector('.form-submit');
-      btn.textContent = 'Thank You — We’ll Be In Touch';
+      var originalLabel = btn.textContent;
       btn.disabled = true;
-      registerForm.querySelectorAll('.form-input').forEach(function(el){ el.disabled = true; });
+      btn.textContent = 'Submitting…';
+
+      var data = {
+        fullName: registerForm.fullName.value,
+        companyName: registerForm.companyName.value,
+        city: registerForm.city.value,
+        age: registerForm.age.value,
+        designation: registerForm.designation.value,
+        referral: registerForm.referral.value,
+        mobile: registerForm.mobile.value,
+        email: registerForm.email.value
+      };
+
+      fetch('register-landing.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+        .then(function(res){ return res.json(); })
+        .then(function(json){
+          if (!json || json.status !== 'success') throw new Error('submit-failed');
+          btn.textContent = 'Thank You — We’ll Be In Touch';
+          registerForm.querySelectorAll('.form-input').forEach(function(el){ el.disabled = true; });
+        })
+        .catch(function(){
+          btn.disabled = false;
+          btn.textContent = originalLabel;
+          alert('Something went wrong submitting your interest. Please try again, or email contact@theindusclub.com directly.');
+        });
     });
   }
 
