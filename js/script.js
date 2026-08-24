@@ -85,7 +85,10 @@
         .then(function(json){
           if (!json || json.status !== 'success') throw new Error('submit-failed');
           btn.textContent = 'Thank You — We’ll Be In Touch';
-          registerForm.querySelectorAll('.form-input').forEach(function(el){ el.disabled = true; });
+          registerForm.reset();
+          setTimeout(function(){
+            window.location.href = 'https://www.theindusclub.com/';
+          }, 1200);
         })
         .catch(function(){
           btn.disabled = false;
