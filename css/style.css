@@ -114,6 +114,37 @@ a{ color:inherit; text-decoration:none; }
   position:absolute; inset:0;
   background:linear-gradient(180deg, rgba(6,10,18,.02) 0%, rgba(6,10,18,0) 35%, rgba(6,10,18,.12) 100%);
 }
+.statement-section{ justify-content:flex-start; }
+.statement-section .banner-scrim{
+  background:linear-gradient(180deg, rgba(6,10,18,0) 45%, rgba(6,10,18,.7) 100%);
+}
+.statement-content{
+  position:relative;
+  z-index:2;
+  width:100%;
+  padding:0 clamp(20px,4vw,56px) clamp(40px,6vw,72px);
+  text-align:center;
+}
+.statement-title{
+  margin:0;
+  font-family:var(--serif);
+  font-weight:700;
+  color:#fff;
+  font-size:clamp(1.3rem, 3vw, 2.1rem);
+  line-height:1.3;
+  letter-spacing:.02em;
+  text-transform:uppercase;
+  text-shadow:0 2px 18px rgba(0,0,0,.45);
+}
+.statement-sub{
+  margin:8px 0 0;
+  font-family:var(--serif);
+  font-style:italic;
+  font-weight:500;
+  color:#fff;
+  font-size:clamp(1.05rem, 1.8vw, 1.35rem);
+  text-shadow:0 2px 18px rgba(0,0,0,.45);
+}
 .hero-section .banner-scrim{
   background:linear-gradient(180deg, rgba(6,10,18,.5) 0%, rgba(6,10,18,.04) 24%, rgba(6,10,18,0) 55%, rgba(6,10,18,.62) 100%);
 }
