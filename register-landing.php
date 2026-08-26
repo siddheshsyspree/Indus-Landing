@@ -24,6 +24,18 @@ if ($full_name === '' || $company_name === '' || $city === '' || $mobile === '' 
   exit;
 }
 
+ignore_user_abort(true);
+set_time_limit(30);
+ob_start();
+echo json_encode(["status" => "success"]);
+header('Content-Length: ' . ob_get_length());
+header('Connection: close');
+ob_end_flush();
+flush();
+if (function_exists('fastcgi_finish_request')) {
+  fastcgi_finish_request();
+}
+
 function get_zoho_access_token($config) {
   $cache_path = __DIR__ . '/zoho-token-cache.json';
 
@@ -139,9 +151,6 @@ $headers .= "Reply-To: " . $email . "\r\n";
 
 $mail = mail($to, $subject, $message, $headers);
 
-if ($mail) {
-  echo json_encode(["status" => "success"]);
-} else {
-  http_response_code(500);
-  echo json_encode(["status" => "error", "message" => "mail() failed"]);
+if (!$mail) {
+  error_log('register-landing.php: mail() failed for submission from ' . $email);
 }
