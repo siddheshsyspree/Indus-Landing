@@ -42,9 +42,11 @@
 }
 
 *,*::before,*::after{ box-sizing:border-box; }
-html{ scroll-behavior:smooth; }
+html{ scroll-behavior:smooth; width:100%; overflow-x:hidden; }
 body{
   margin:0;
+  padding:0;
+  width:100%;
   font-family:var(--sans);
   color:var(--navy);
   background:var(--cream);
@@ -97,6 +99,7 @@ a{ color:inherit; text-decoration:none; }
 /* ================= Full-width banner/statement sections ================= */
 .banner-section{
   position:relative;
+  width:100%;
   height:100vh;
   min-height:520px;
   max-height:980px;
@@ -142,7 +145,7 @@ a{ color:inherit; text-decoration:none; }
   font-style:italic;
   font-weight:500;
   color:#fff;
-  font-size:clamp(1.15rem, 2vw, 1.5rem);
+  font-size:clamp(1.4rem, 2.6vw, 1.9rem);
   text-shadow:0 2px 18px rgba(0,0,0,.45);
 }
 .hero-section .banner-scrim{
@@ -178,7 +181,7 @@ a{ color:inherit; text-decoration:none; }
   font-family:var(--serif);
   font-weight:700;
   color:#fff;
-  font-size:clamp(1.1rem, 2.4vw, 1.8rem);
+  font-size:clamp(1.3rem, 3vw, 2.1rem);
   line-height:1.35;
   letter-spacing:.02em;
   text-transform:uppercase;
@@ -237,15 +240,28 @@ a{ color:inherit; text-decoration:none; }
   line-height:1.4;
   max-width:640px;
 }
-#gallery .lead-title-after,
-#locations .lead-title-after{
+#gallery .lead-title-after{
   color:#1e3870;
   font-size:clamp(1.35rem, 1.9vw, 1.7rem);
+  margin-top:40px; padding-bottom:40px;
 }
-#gallery .lead-title-after{ margin-top:40px; padding-bottom:40px; }
-#locations .lead-title-after{ padding-bottom:8px; }
+#locations .lead-title-after{
+  color:#1e3870;
+  font-size:33px;
+  max-width:none;
+  margin-top:40px; padding-bottom:8px;
+}
 #gallery{ padding-bottom:0; }
 .lead-title-caps{ text-transform:uppercase; font-weight:700; letter-spacing:.02em; }
+.tagline-italic{
+  margin:6px auto 0;
+  font-family:var(--serif);
+  font-style:italic;
+  font-weight:500;
+  color:#1e3870;
+  font-size:clamp(1.3rem, 2.2vw, 1.8rem);
+  text-align:center;
+}
 .serif-italic{ font-family:var(--serif); font-style:normal; font-weight:600; }
 
 .grid-section{ padding:clamp(24px,3vw,40px) 0; background:var(--cream); }
@@ -325,7 +341,7 @@ a{ color:inherit; text-decoration:none; }
 }
 .tile-grid.facilities-grid{
   display:grid;
-  grid-template-columns:repeat(3, 1fr);
+  grid-template-columns:repeat(4, 1fr);
   gap:28px;
 }
 .facility-card{
@@ -504,6 +520,47 @@ a{ color:inherit; text-decoration:none; }
 }
 .back-to-top.is-visible{ opacity:1; pointer-events:auto; transform:translateY(0); }
 
+/* ================= Success modal ================= */
+.success-modal{
+  position:fixed; inset:0; z-index:1000;
+  display:flex; align-items:center; justify-content:center;
+  padding:20px;
+  opacity:0; visibility:hidden;
+  transition:opacity .35s var(--ease), visibility .35s var(--ease);
+}
+.success-modal.is-visible{ opacity:1; visibility:visible; }
+.success-modal-backdrop{
+  position:absolute; inset:0;
+  background:rgba(12,20,32,.72);
+}
+.success-modal-card{
+  position:relative; z-index:1;
+  width:100%; max-width:420px;
+  background:var(--cream);
+  border-radius:4px;
+  padding:44px 36px 40px;
+  text-align:center;
+  box-shadow:0 30px 60px rgba(0,0,0,.35);
+  transform:translateY(14px) scale(.97);
+  transition:transform .35s var(--ease);
+}
+.success-modal.is-visible .success-modal-card{ transform:translateY(0) scale(1); }
+.success-modal-icon{
+  display:flex; align-items:center; justify-content:center;
+  width:56px; height:56px; margin:0 auto 20px;
+  border-radius:50%;
+  background:var(--navy); color:var(--gold);
+  font-size:1.5rem;
+}
+.success-modal-title{
+  font-family:var(--serif); font-weight:700; color:var(--navy);
+  font-size:1.6rem; margin:0 0 12px;
+}
+.success-modal-text{
+  font-family:var(--sans); color:var(--text-muted);
+  font-size:.98rem; line-height:1.6; margin:0;
+}
+
 /* ================= Scroll reveal ================= */
 .reveal{
   opacity:0; transform:translateY(28px);
@@ -538,17 +595,18 @@ a{ color:inherit; text-decoration:none; }
 }
 
 @media (max-width: 640px){
+  #locations .lead-title-after{ font-size:clamp(1.4rem, 5vw, 1.9rem); }
   .brand-lockup{ height:38px; }
   .footer-inner{ flex-direction:column; align-items:flex-start; text-align:left; }
   .footer-copyright{ white-space:normal; }
   .banner-section{ height:auto; aspect-ratio:1920/970; min-height:200px; background:var(--ink); }
   .banner-section.hero-section,
   .banner-section.statement-section{ aspect-ratio:1080/1920; max-height:none; }
+  .banner-section.statement-section-lobby{ aspect-ratio:1080/1350; }
   .banner-img{ object-fit:cover; }
   .hero-content{ padding:36px 20px 44px; }
-  .hero-logo{ display:block; width:56%; }
+  .hero-logo{ display:none; }
   .hero-bottom{ gap:22px; }
-  .hero-title{ font-size:1.1rem; }
   .tile-grid.locations-grid{ grid-template-columns:repeat(2, 1fr); gap:10px; }
   .mosaic-grid{ grid-template-columns:1fr; }
   .mosaic-tile[data-pos="dining"],
