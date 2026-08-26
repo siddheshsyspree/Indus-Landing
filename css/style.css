@@ -542,7 +542,8 @@ a{ color:inherit; text-decoration:none; }
   .footer-inner{ flex-direction:column; align-items:flex-start; text-align:left; }
   .footer-copyright{ white-space:normal; }
   .banner-section{ height:auto; aspect-ratio:1920/970; min-height:200px; background:var(--ink); }
-  .banner-section.hero-section{ aspect-ratio:1080/1920; max-height:none; }
+  .banner-section.hero-section,
+  .banner-section.statement-section{ aspect-ratio:1080/1920; max-height:none; }
   .banner-img{ object-fit:cover; }
   .hero-content{ padding:36px 20px 44px; }
   .hero-logo{ display:block; width:56%; }
