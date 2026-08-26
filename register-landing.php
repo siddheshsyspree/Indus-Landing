@@ -24,133 +24,57 @@ if ($full_name === '' || $company_name === '' || $city === '' || $mobile === '' 
   exit;
 }
 
-ignore_user_abort(true);
-set_time_limit(30);
-ob_start();
-echo json_encode(["status" => "success"]);
-header('Content-Length: ' . ob_get_length());
-header('Connection: close');
-ob_end_flush();
-flush();
-if (function_exists('fastcgi_finish_request')) {
-  fastcgi_finish_request();
-}
+function fire_and_forget($url, $data, $headers = []) {
+  $parts = parse_url($url);
+  $host = $parts['host'];
+  $path = ($parts['path'] ?? '/') . (isset($parts['query']) ? '?' . $parts['query'] : '');
+  $secure = ($parts['scheme'] ?? 'http') === 'https';
+  $port = $parts['port'] ?? ($secure ? 443 : 80);
+  $payload = json_encode($data);
 
-function get_zoho_access_token($config) {
-  $cache_path = __DIR__ . '/zoho-token-cache.json';
-
-  if (file_exists($cache_path)) {
-    $cached = json_decode(file_get_contents($cache_path), true);
-    if (($cached['expires_at'] ?? 0) > time() + 60) {
-      return $cached['access_token'];
-    }
-  }
-
-  $token_response = @file_get_contents($config['accounts_domain'] . '/oauth/v2/token?' . http_build_query([
-    'grant_type'    => 'refresh_token',
-    'client_id'     => $config['client_id'],
-    'client_secret' => $config['client_secret'],
-    'refresh_token' => $config['refresh_token'],
-  ]), false, stream_context_create(['http' => ['method' => 'POST']]));
-
-  if ($token_response === false) {
-    error_log('Zoho CRM push failed: could not reach accounts.zoho.com for access token');
-    return null;
-  }
-
-  $token_data = json_decode($token_response, true);
-  $access_token = $token_data['access_token'] ?? null;
-  if (!$access_token) {
-    error_log('Zoho CRM push failed: no access_token in response - ' . $token_response);
-    return null;
-  }
-
-  file_put_contents($cache_path, json_encode([
-    'access_token' => $access_token,
-    'expires_at'   => time() + ($token_data['expires_in'] ?? 3600),
-  ]));
-
-  return $access_token;
-}
-
-function push_lead_to_zoho($full_name, $company_name, $city, $age, $designation, $referral, $mobile, $email) {
-  $config_path = __DIR__ . '/zoho-config.php';
-  if (!file_exists($config_path)) {
-    error_log('Zoho CRM push skipped: zoho-config.php not found');
+  $remote = ($secure ? 'ssl://' : '') . $host . ':' . $port;
+  $errno = 0;
+  $errstr = '';
+  $fp = @stream_socket_client($remote, $errno, $errstr, 3);
+  if (!$fp) {
+    error_log("fire_and_forget: could not connect to $remote ($errno $errstr)");
     return false;
   }
+  stream_set_timeout($fp, 3);
+
+  $header_lines = "Host: $host\r\n" .
+    "Content-Type: application/json\r\n" .
+    "Content-Length: " . strlen($payload) . "\r\n" .
+    "Connection: Close\r\n";
+  foreach ($headers as $name => $value) {
+    $header_lines .= "$name: $value\r\n";
+  }
+
+  $out = "POST $path HTTP/1.1\r\n" . $header_lines . "\r\n" . $payload;
+  fwrite($fp, $out);
+  fclose($fp);
+  return true;
+}
+
+$config_path = __DIR__ . '/zoho-config.php';
+if (file_exists($config_path)) {
   $config = require $config_path;
-
-  $access_token = get_zoho_access_token($config);
-  if (!$access_token) {
-    return false;
-  }
-
-  $name_parts = preg_split('/\s+/', $full_name, 2);
-  $first_name = $name_parts[0] ?? '';
-  $last_name  = $name_parts[1] ?? $name_parts[0] ?? '';
-
-  $notes = [];
-  if ($age !== '') $notes[] = "Age: $age";
-  if ($referral !== '') $notes[] = "How they learned about us: $referral";
-
-  $lead = [
-    'Last_Name'   => $last_name,
-    'First_Name'  => $first_name,
-    'Company'     => $company_name,
-    'Email'       => $email,
-    'Mobile'      => $mobile,
-    'City'        => $city,
-    'Designation' => $designation,
-    'Source_Of_Contact' => 'Landing Page',
-    'Description' => implode("\n", $notes) . "\n\nSubmitted via theindusclub.com/landing.html",
-  ];
-
-  $payload = json_encode(['data' => [$lead]]);
-
-  $ch = curl_init($config['api_domain'] . '/crm/v2/Leads');
-  curl_setopt_array($ch, [
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_POST           => true,
-    CURLOPT_POSTFIELDS     => $payload,
-    CURLOPT_HTTPHEADER     => [
-      'Authorization: Zoho-oauthtoken ' . $access_token,
-      'Content-Type: application/json',
+  fire_and_forget(
+    'https://www.theindusclub.com/process-lead.php',
+    [
+      'fullName'    => $full_name,
+      'companyName' => $company_name,
+      'city'        => $city,
+      'age'         => $age,
+      'designation' => $designation,
+      'referral'    => $referral,
+      'mobile'      => $mobile,
+      'email'       => $email,
     ],
-    CURLOPT_TIMEOUT        => 10,
-  ]);
-  $result = curl_exec($ch);
-  $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-  $record_status = json_decode($result, true)['data'][0]['status'] ?? null;
-  if ($http_code >= 200 && $http_code < 300 && $record_status === 'success') {
-    return true;
-  }
-
-  error_log("Zoho CRM push failed (HTTP $http_code): $result");
-  return false;
+    ['X-Internal-Secret' => $config['internal_secret'] ?? '']
+  );
+} else {
+  error_log('register-landing.php: zoho-config.php not found, skipping process-lead dispatch');
 }
 
-push_lead_to_zoho($full_name, $company_name, $city, $age, $designation, $referral, $mobile, $email);
-
-$to = 'contact@theindusclub.com';
-$subject = "THE INDUS CLUB | Register Your Interest";
-
-$message  = "New membership interest submitted from theindusclub.com/landing.html\n\n";
-$message .= "Name - " . $full_name . "\n";
-$message .= "Company Name - " . $company_name . "\n";
-$message .= "Email - " . $email . "\n";
-$message .= "Mobile - " . $mobile . "\n";
-$message .= "City - " . $city . "\n";
-$message .= "Age - " . $age . "\n";
-$message .= "Designation - " . $designation . "\n";
-$message .= "How they learned about us - " . $referral . "\n";
-
-$headers  = "From: The Indus Club Website <no-reply@theindusclub.com>\r\n";
-$headers .= "Reply-To: " . $email . "\r\n";
-
-$mail = mail($to, $subject, $message, $headers);
-
-if (!$mail) {
-  error_log('register-landing.php: mail() failed for submission from ' . $email);
-}
+echo json_encode(["status" => "success"]);
