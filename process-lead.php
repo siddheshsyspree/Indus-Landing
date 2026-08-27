@@ -106,13 +106,38 @@ function push_lead_to_zoho($config, $full_name, $company_name, $city, $age, $des
   $result = curl_exec($ch);
   $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-  $record_status = json_decode($result, true)['data'][0]['status'] ?? null;
-  if ($http_code >= 200 && $http_code < 300 && $record_status === 'success') {
-    return true;
+  $response_data = json_decode($result, true)['data'][0] ?? null;
+  $record_status = $response_data['status'] ?? null;
+  if ($http_code < 200 || $http_code >= 300 || $record_status !== 'success') {
+    error_log("Zoho CRM push failed (HTTP $http_code): $result");
+    return false;
   }
 
-  error_log("Zoho CRM push failed (HTTP $http_code): $result");
-  return false;
+  $record_id = $response_data['details']['id'] ?? null;
+  if ($record_id) {
+    // A workflow rule on the Prospects module resets Source_Of_Contact to a
+    // default value on create, ignoring whatever is sent in the initial
+    // payload. A follow-up update bypasses that workflow and sticks.
+    $update_ch = curl_init($config['api_domain'] . '/crm/v2/Prospects/' . $record_id);
+    curl_setopt_array($update_ch, [
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_CUSTOMREQUEST  => 'PUT',
+      CURLOPT_POSTFIELDS     => json_encode(['data' => [['Source_Of_Contact' => 'Google Ads']]]),
+      CURLOPT_HTTPHEADER     => [
+        'Authorization: Zoho-oauthtoken ' . $access_token,
+        'Content-Type: application/json',
+      ],
+      CURLOPT_TIMEOUT        => 10,
+    ]);
+    $update_result = curl_exec($update_ch);
+    $update_http_code = curl_getinfo($update_ch, CURLINFO_HTTP_CODE);
+
+    if ($update_http_code < 200 || $update_http_code >= 300) {
+      error_log("Zoho CRM Source_Of_Contact update failed (HTTP $update_http_code): $update_result");
+    }
+  }
+
+  return true;
 }
 
 push_lead_to_zoho($config, $full_name, $company_name, $city, $age, $designation, $referral, $mobile, $email);
