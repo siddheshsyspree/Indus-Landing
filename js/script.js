@@ -73,7 +73,8 @@
         designation: registerForm.designation.value,
         referral: registerForm.referral.value,
         mobile: registerForm.mobile.value,
-        email: registerForm.email.value
+        email: registerForm.email.value,
+        gclid: registerForm.zc_gad.value
       };
 
       fetch('register-landing.php', {

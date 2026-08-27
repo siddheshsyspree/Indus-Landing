@@ -25,6 +25,7 @@ $referral     = is_string($req->referral ?? null) ? $req->referral : '';
 $mobile       = is_string($req->mobile ?? null) ? $req->mobile : '';
 $email        = is_string($req->email ?? null) ? $req->email : '';
 $source       = is_string($req->source ?? null) && $req->source !== '' ? $req->source : 'Website Lead';
+$gclid        = is_string($req->gclid ?? null) ? $req->gclid : '';
 
 function get_zoho_access_token($config) {
   $cache_path = __DIR__ . '/zoho-token-cache.json';
@@ -65,7 +66,7 @@ function get_zoho_access_token($config) {
   return $access_token;
 }
 
-function push_lead_to_zoho($config, $full_name, $company_name, $city, $age, $designation, $referral, $mobile, $email, $source) {
+function push_lead_to_zoho($config, $full_name, $company_name, $city, $age, $designation, $referral, $mobile, $email, $source, $gclid) {
   $access_token = get_zoho_access_token($config);
   if (!$access_token) {
     return false;
@@ -78,6 +79,7 @@ function push_lead_to_zoho($config, $full_name, $company_name, $city, $age, $des
   $notes = ["Source: $source"];
   if ($age !== '') $notes[] = "Age: $age";
   if ($referral !== '') $notes[] = "How they learned about us: $referral";
+  if ($gclid !== '') $notes[] = "Google Click ID: $gclid";
 
   $prospect = [
     'Name'        => $full_name,
@@ -141,7 +143,7 @@ function push_lead_to_zoho($config, $full_name, $company_name, $city, $age, $des
   return true;
 }
 
-push_lead_to_zoho($config, $full_name, $company_name, $city, $age, $designation, $referral, $mobile, $email, $source);
+push_lead_to_zoho($config, $full_name, $company_name, $city, $age, $designation, $referral, $mobile, $email, $source, $gclid);
 
 $to = 'contact@theindusclub.com';
 $subject = "THE INDUS CLUB | Register Your Interest";

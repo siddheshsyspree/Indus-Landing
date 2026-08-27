@@ -17,6 +17,7 @@ $designation  = clean_field($req->designation ?? '');
 $referral     = clean_field($req->referral ?? '');
 $mobile       = clean_field($req->mobile ?? '');
 $email        = clean_field($req->email ?? '');
+$gclid        = clean_field($req->gclid ?? '');
 
 if ($full_name === '' || $company_name === '' || $city === '' || $mobile === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
   http_response_code(400);
@@ -36,6 +37,7 @@ dispatch_to_zoho([
   'mobile'      => $mobile,
   'email'       => $email,
   'source'      => 'Google Ads',
+  'gclid'       => $gclid,
 ]);
 
 echo json_encode(["status" => "success"]);
