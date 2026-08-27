@@ -27,10 +27,11 @@ $email        = is_string($req->email ?? null) ? $req->email : '';
 
 function get_zoho_access_token($config) {
   $cache_path = __DIR__ . '/zoho-token-cache.json';
+  $refresh_token_hash = substr(md5($config['refresh_token']), 0, 12);
 
   if (file_exists($cache_path)) {
     $cached = json_decode(file_get_contents($cache_path), true);
-    if (($cached['expires_at'] ?? 0) > time() + 60) {
+    if (($cached['expires_at'] ?? 0) > time() + 60 && ($cached['refresh_token_hash'] ?? null) === $refresh_token_hash) {
       return $cached['access_token'];
     }
   }
@@ -57,6 +58,7 @@ function get_zoho_access_token($config) {
   file_put_contents($cache_path, json_encode([
     'access_token' => $access_token,
     'expires_at'   => time() + ($token_data['expires_in'] ?? 3600),
+    'refresh_token_hash' => $refresh_token_hash,
   ]));
 
   return $access_token;
@@ -72,25 +74,25 @@ function push_lead_to_zoho($config, $full_name, $company_name, $city, $age, $des
   $first_name = $name_parts[0] ?? '';
   $last_name  = $name_parts[1] ?? $name_parts[0] ?? '';
 
-  $notes = [];
+  $notes = ['Source: Landing Page'];
   if ($age !== '') $notes[] = "Age: $age";
   if ($referral !== '') $notes[] = "How they learned about us: $referral";
 
-  $lead = [
+  $prospect = [
+    'Name'        => $full_name,
+    'Single_Line_1' => $first_name,
     'Last_Name'   => $last_name,
-    'First_Name'  => $first_name,
     'Company'     => $company_name,
     'Email'       => $email,
     'Mobile'      => $mobile,
-    'City'        => $city,
+    'Home_City'   => $city,
     'Designation' => $designation,
-    'Source_Of_Contact' => 'Landing Page',
     'Description' => implode("\n", $notes) . "\n\nSubmitted via theindusclub.com/landing.html",
   ];
 
-  $payload = json_encode(['data' => [$lead]]);
+  $payload = json_encode(['data' => [$prospect]]);
 
-  $ch = curl_init($config['api_domain'] . '/crm/v2/Leads');
+  $ch = curl_init($config['api_domain'] . '/crm/v2/Prospects');
   curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_POST           => true,
