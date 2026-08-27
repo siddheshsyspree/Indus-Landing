@@ -24,57 +24,18 @@ if ($full_name === '' || $company_name === '' || $city === '' || $mobile === '' 
   exit;
 }
 
-function fire_and_forget($url, $data, $headers = []) {
-  $parts = parse_url($url);
-  $host = $parts['host'];
-  $path = ($parts['path'] ?? '/') . (isset($parts['query']) ? '?' . $parts['query'] : '');
-  $secure = ($parts['scheme'] ?? 'http') === 'https';
-  $port = $parts['port'] ?? ($secure ? 443 : 80);
-  $payload = json_encode($data);
+require __DIR__ . '/zoho-dispatch.php';
 
-  $remote = ($secure ? 'ssl://' : '') . $host . ':' . $port;
-  $errno = 0;
-  $errstr = '';
-  $fp = @stream_socket_client($remote, $errno, $errstr, 3);
-  if (!$fp) {
-    error_log("fire_and_forget: could not connect to $remote ($errno $errstr)");
-    return false;
-  }
-  stream_set_timeout($fp, 3);
-
-  $header_lines = "Host: $host\r\n" .
-    "Content-Type: application/json\r\n" .
-    "Content-Length: " . strlen($payload) . "\r\n" .
-    "Connection: Close\r\n";
-  foreach ($headers as $name => $value) {
-    $header_lines .= "$name: $value\r\n";
-  }
-
-  $out = "POST $path HTTP/1.1\r\n" . $header_lines . "\r\n" . $payload;
-  fwrite($fp, $out);
-  fclose($fp);
-  return true;
-}
-
-$config_path = __DIR__ . '/zoho-config.php';
-if (file_exists($config_path)) {
-  $config = require $config_path;
-  fire_and_forget(
-    'https://www.theindusclub.com/process-lead.php',
-    [
-      'fullName'    => $full_name,
-      'companyName' => $company_name,
-      'city'        => $city,
-      'age'         => $age,
-      'designation' => $designation,
-      'referral'    => $referral,
-      'mobile'      => $mobile,
-      'email'       => $email,
-    ],
-    ['X-Internal-Secret' => $config['internal_secret'] ?? '']
-  );
-} else {
-  error_log('register-landing.php: zoho-config.php not found, skipping process-lead dispatch');
-}
+dispatch_to_zoho([
+  'fullName'    => $full_name,
+  'companyName' => $company_name,
+  'city'        => $city,
+  'age'         => $age,
+  'designation' => $designation,
+  'referral'    => $referral,
+  'mobile'      => $mobile,
+  'email'       => $email,
+  'source'      => 'Google Ads',
+]);
 
 echo json_encode(["status" => "success"]);

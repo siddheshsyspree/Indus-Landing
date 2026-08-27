@@ -24,6 +24,7 @@ $designation  = is_string($req->designation ?? null) ? $req->designation : '';
 $referral     = is_string($req->referral ?? null) ? $req->referral : '';
 $mobile       = is_string($req->mobile ?? null) ? $req->mobile : '';
 $email        = is_string($req->email ?? null) ? $req->email : '';
+$source       = is_string($req->source ?? null) && $req->source !== '' ? $req->source : 'Website Lead';
 
 function get_zoho_access_token($config) {
   $cache_path = __DIR__ . '/zoho-token-cache.json';
@@ -64,7 +65,7 @@ function get_zoho_access_token($config) {
   return $access_token;
 }
 
-function push_lead_to_zoho($config, $full_name, $company_name, $city, $age, $designation, $referral, $mobile, $email) {
+function push_lead_to_zoho($config, $full_name, $company_name, $city, $age, $designation, $referral, $mobile, $email, $source) {
   $access_token = get_zoho_access_token($config);
   if (!$access_token) {
     return false;
@@ -74,7 +75,7 @@ function push_lead_to_zoho($config, $full_name, $company_name, $city, $age, $des
   $first_name = $name_parts[0] ?? '';
   $last_name  = $name_parts[1] ?? $name_parts[0] ?? '';
 
-  $notes = ['Source: Landing Page'];
+  $notes = ["Source: $source"];
   if ($age !== '') $notes[] = "Age: $age";
   if ($referral !== '') $notes[] = "How they learned about us: $referral";
 
@@ -87,7 +88,7 @@ function push_lead_to_zoho($config, $full_name, $company_name, $city, $age, $des
     'Mobile'      => $mobile,
     'Home_City'   => $city,
     'Designation' => $designation,
-    'Description' => implode("\n", $notes) . "\n\nSubmitted via theindusclub.com/landing.html",
+    'Description' => implode("\n", $notes) . "\n\nSubmitted via theindusclub.com",
   ];
 
   $payload = json_encode(['data' => [$prospect]]);
@@ -122,7 +123,7 @@ function push_lead_to_zoho($config, $full_name, $company_name, $city, $age, $des
     curl_setopt_array($update_ch, [
       CURLOPT_RETURNTRANSFER => true,
       CURLOPT_CUSTOMREQUEST  => 'PUT',
-      CURLOPT_POSTFIELDS     => json_encode(['data' => [['Source_Of_Contact' => 'Google Ads']]]),
+      CURLOPT_POSTFIELDS     => json_encode(['data' => [['Source_Of_Contact' => $source]]]),
       CURLOPT_HTTPHEADER     => [
         'Authorization: Zoho-oauthtoken ' . $access_token,
         'Content-Type: application/json',
@@ -140,7 +141,7 @@ function push_lead_to_zoho($config, $full_name, $company_name, $city, $age, $des
   return true;
 }
 
-push_lead_to_zoho($config, $full_name, $company_name, $city, $age, $designation, $referral, $mobile, $email);
+push_lead_to_zoho($config, $full_name, $company_name, $city, $age, $designation, $referral, $mobile, $email, $source);
 
 $to = 'contact@theindusclub.com';
 $subject = "THE INDUS CLUB | Register Your Interest";
